@@ -1864,7 +1864,7 @@ static void rib_process_result(struct zebra_dplane_ctx *ctx)
 	 */
 	RNODE_FOREACH_RE(rn, rib) {
 
-		if (re == NULL) {
+		if (re == NULL || re != dest->selected_fib) {
 			if (rib_route_match_ctx(rib, ctx, false))
 				re = rib;
 		}
@@ -1876,7 +1876,7 @@ static void rib_process_result(struct zebra_dplane_ctx *ctx)
 		}
 
 		/* Have we found the routes we need to work on? */
-		if (re && ((!is_update || old_re)))
+		if (re == dest->selected_fib && ((!is_update || old_re)))
 			break;
 	}
 
